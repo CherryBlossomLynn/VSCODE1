@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lynn's Database</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="brand-header">
+                <h1><i class="fas fa-rocket"></i> Lynn's Database</h1>
+                <div class="website-url">🌐 lynnsdatabase.local</div>
+            </div>
+            <p>Checkout personalized details about friends, family, and more!</details>
+            </p>
+        </header>
+
+        <!-- Login Section -->
+        <section class="login-section" id="loginSection">
+            <div class="login-container">
+                <h2><i class="fas fa-user-lock"></i> Access Lynn's Database</h2>
+                <form class="login-form" id="loginForm">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <div class="login-info">
+                        <small><strong>Demo Accounts:</strong></small><br>
+                        <small>👤 <strong>lynn</strong> | Password: <strong>Lynn@1104</strong></small><br>
+                        <small>👤 <strong>michael</strong> | Password: <strong>database2025</strong></small>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Main Content (hidden initially) -->
+        <main id="mainContent" style="display: none;">
+            <div class="user-welcome" id="userWelcome">
+                <p><i class="fas fa-user-check"></i> Welcome back, <span id="currentUserName">User</span>!</p>
+            </div>
+
+            <img src="images/Lynns-musicimage.png" alt="Lynn's Music Image" class="simple-image">
+
+            <section class="feature-section">
+                <h2 style="text-align: center; color: #007cba; margin-bottom: 20px;">
+                    <i class="fas fa-mouse-pointer"></i> Interactive Features
+                </h2>
+
+                <button id="button">Click me! 🎯</button>
+
+                <div id="demo">Ready for action! Click the button above.</div>
+
+                <div class="counter" id="counter">Click counter will appear here</div>
+
+                <button id="resetBtn" style="
+                    background: linear-gradient(45deg, #6c757d, #495057);
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    margin: 10px auto;
+                    display: block;
+                    transition: all 0.3s ease;
+                ">🔄 Reset Counter</button>
+            </section>
+
+            <footer style="text-align: center; margin-top: 30px; padding: 20px; color: #666;">
+                <p><i class="fas fa-code"></i> Built with HTML5, CSS3 & JavaScript</p>
+                <p><small>Modern web development with interactive features</small></p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
