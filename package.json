@@ -7,6 +7,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "setup-db": "node mysql-config.js",
+    "import-xampp": "node import-xampp-users.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

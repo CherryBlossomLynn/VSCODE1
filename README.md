@@ -88,6 +88,14 @@ For database integration:
    npm start
    ```
 
+### Import from XAMPP (Optional)
+To import users from an existing XAMPP MySQL database:
+```bash
+# Import users while preserving core accounts
+npm run import-xampp
+```
+📖 **Detailed instructions:** See [XAMPP-IMPORT-GUIDE.md](./XAMPP-IMPORT-GUIDE.md)
+
 ### Demo Accounts
 - **Admin**: `lynn` / `Lynn@1104`
 - **User**: `michael` / `database2025`
