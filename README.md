@@ -23,14 +23,80 @@ A comprehensive, modern database website featuring user authentication, advanced
 
 ## 🚀 Quick Start
 
+### MySQL Setup (Optional)
+For database integration:
+1. **Install MySQL Server**
+   ```bash
+   # Windows (using winget)
+   winget install Oracle.MySQL
+   
+   # macOS (using Homebrew)
+   brew install mysql
+   
+   # Ubuntu/Debian
+   sudo apt install mysql-server
+   ```
+
+2. **Configure MySQL**
+   ```sql
+   CREATE DATABASE lynns_database;
+   CREATE USER 'lynn_user'@'localhost' IDENTIFIED BY 'secure_password';
+   GRANT ALL PRIVILEGES ON lynns_database.* TO 'lynn_user'@'localhost';
+   FLUSH PRIVILEGES;
+   ```
+
+3. **Connection Settings**
+   ```javascript
+   const dbConfig = {
+     host: 'localhost',
+     user: 'lynn_user',
+     password: 'secure_password',
+     database: 'lynns_database',
+     port: 3306
+   };
+   ```
+
+### Installation & Setup
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/CherryBlossomLynn/VSCODE1.git
+   cd VSCODE1
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your MySQL credentials
+   ```
+
+4. **Setup database**
+   ```bash
+   npm run setup-db
+   ```
+
+5. **Start the server**
+   ```bash
+   # Development mode
+   npm run dev
+   
+   # Production mode
+   npm start
+   ```
+
 ### Demo Accounts
 - **Admin**: `lynn` / `Lynn@1104`
 - **User**: `michael` / `database2025`
 
 ### Accessing the Website
-1. Ensure XAMPP is running
+1. Ensure MySQL server is running
 2. Navigate to: `http://lynnsdatabase.local`
-3. Or use: `http://localhost/VSCODE1`
+3. Or use: `http://localhost:3000/VSCODE1` (for development server)
+4. Or directly open `lynn-website.html` in your browser
 
 ## 🎯 User Guide
 
@@ -137,7 +203,8 @@ The website includes a real-time statistics dashboard showing:
 ## 🌐 Domain Configuration
 Configured to work with:
 - `lynnsdatabase.local` (Primary)
-- `localhost/VSCODE1` (Alternative)
+- `localhost:3000/VSCODE1` (Development server)
+- Direct file access via `lynn-website.html` (Standalone)
 
 ## 💾 Data Management
 - **Auto Backup**: Every 5 minutes
