@@ -1,15 +1,980 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Page Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lynn's Database</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+    </noscript>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    </noscript>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 </head>
 
 <body>
-    <h1>Heading 1</h1>
-    <p>This is a paragraph.</p>
-    <img src="image.jpg" alt="Image Description">
-    <a href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">Link</a>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Auto-save indicator -->
+    <div class="auto-save-indicator">Auto-saved</div>
+
+    <div class="container" role="main">
+        <header>
+            <div class="brand-header">
+                <h1><i class="fas fa-database"></i> Welcome!</h1>
+                <div class="website-url">🌐 lynnsdatabase.local</div>
+            </div>
+            <p>Checkout personalized details about friends, family, and more!</p>
+        </header>
+
+        <!-- Login Section -->
+        <section class="login-section" id="loginSection">
+            <div class="login-container">
+                <h2><i class="fas fa-user-lock"></i> Access Lynn's Database</h2>
+                <form class="login-form" id="loginForm">
+                    <div class="input-group">
+                        <label for="username" class="sr-only">Username</label>
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <input type="text" id="username" placeholder="Username" required
+                            aria-describedby="username-help">
+                    </div>
+                    <div class="input-group">
+                        <label for="password" class="sr-only">Password</label>
+                        <i class="fas fa-lock" aria-hidden="true"></i>
+                        <input type="password" id="password" placeholder="Password" required
+                            aria-describedby="password-help">
+                    </div>
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span class="login-text">Login</span>
+                        <div class="login-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                    <div class="login-info">
+                        <small><strong>Demo Accounts:</strong></small><br>
+                        <small>👤 <strong>lynn</strong> | Password: <strong>Lynn@1104</strong></small><br>
+                        <small>👤 <strong>michael</strong> | Password: <strong>database2025</strong></small>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Main Content (hidden initially) -->
+        <main id="mainContent" id="main-content" style="display: none;" aria-live="polite">
+            <!-- Navigation Header -->
+            <nav class="main-nav" role="navigation" aria-label="Main navigation">
+                <div class="nav-left">
+                    <div class="user-welcome" role="status" aria-live="polite">
+                        <i class="fas fa-user-check" aria-hidden="true"></i>
+                        <span>Welcome back, <span id="currentUserName">User</span>!</span>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <button id="accountBtn" class="nav-btn account-btn" aria-describedby="account-tooltip">
+                        <i class="fas fa-user-circle" aria-hidden="true"></i>
+                        <span>My Account</span>
+                    </button>
+                    <button id="logoutBtn" class="nav-btn logout-btn" aria-describedby="logout-tooltip">
+                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Main Page Content -->
+            <div id="mainPage" class="page-content">
+                <section class="search-section">
+                    <div class="search-header">
+                        <h2><i class="fas fa-search"></i> User Search</h2>
+                        <p>Search and find users in Lynn's Database</p>
+                    </div>
+
+                    <div class="search-container">
+                        <div class="search-box">
+                            <label for="userSearchInput" class="sr-only">Search for users</label>
+                            <input type="text" id="userSearchInput"
+                                placeholder="Search for users by name, email, or role..."
+                                aria-describedby="search-help">
+                            <button id="searchUserBtn" class="search-btn" aria-describedby="search-help">
+                                <i class="fas fa-search" aria-hidden="true"></i>
+                                Search
+                            </button>
+                            <button class="filter-btn" onclick="toggleAdvancedSearch()" aria-label="Advanced Filters">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                        </div>
+
+                        <div class="search-filters">
+                            <label for="roleFilter" class="sr-only">Filter by role</label>
+                            <select id="roleFilter" aria-label="Filter users by role">
+                                <option value="">All Roles</option>
+                                <option value="Admin">Admin</option>
+                                <option value="User">User</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Moderator">Moderator</option>
+                            </select>
+                            <label for="statusFilter" class="sr-only">Filter by status</label>
+                            <select id="statusFilter" aria-label="Filter users by status">
+                                <option value="">All Status</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Suspended">Suspended</option>
+                            </select>
+                        </div>
+
+                        <div class="advanced-search" id="advancedSearch" style="display: none;">
+                            <div class="filter-row">
+                                <div class="filter-group">
+                                    <label>Registration:</label>
+                                    <select id="filterRegistration">
+                                        <option value="">Any Time</option>
+                                        <option value="today">Today</option>
+                                        <option value="week">This Week</option>
+                                        <option value="month">This Month</option>
+                                        <option value="year">This Year</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Sort By:</label>
+                                    <select id="sortBy">
+                                        <option value="name">Name</option>
+                                        <option value="date">Registration Date</option>
+                                        <option value="activity">Last Activity</option>
+                                        <option value="role">Role</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Order:</label>
+                                    <select id="sortOrder">
+                                        <option value="asc">Ascending</option>
+                                        <option value="desc">Descending</option>
+                                    </select>
+                                </div>
+                                <div class="filter-actions">
+                                    <button class="filter-action-btn primary" onclick="applyFilters()">
+                                        <i class="fas fa-check"></i> Apply
+                                    </button>
+                                    <button class="filter-action-btn secondary" onclick="clearFilters()">
+                                        <i class="fas fa-times"></i> Clear
+                                    </button>
+                                    <button class="filter-action-btn info" onclick="saveSearch()">
+                                        <i class="fas fa-star"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="saved-searches" id="savedSearches">
+                                <label>Saved Searches:</label>
+                                <div class="saved-search-tags" id="savedSearchTags">
+                                    <span class="search-tag" onclick="loadSavedSearch('admins')">
+                                        <i class="fas fa-user-shield"></i> Admin Users
+                                        <button class="remove-tag"
+                                            onclick="removeSavedSearch('admins')">&times;</button>
+                                    </span>
+                                    <span class="search-tag" onclick="loadSavedSearch('recent')">
+                                        <i class="fas fa-clock"></i> Recent Users
+                                        <button class="remove-tag"
+                                            onclick="removeSavedSearch('recent')">&times;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="searchResults" class="search-results" role="region" aria-live="polite"
+                        aria-label="Search results">
+                        <div class="no-results">
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                            <p>Enter a search term to find users</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading state -->
+                    <div id="searchLoading" class="search-loading" style="display: none;">
+                        <div class="loading-spinner"></div>
+                        <p>Searching...</p>
+                    </div>
+                </section>
+
+                <section class="stats-section">
+                    <h3><i class="fas fa-chart-bar"></i> Database Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <h4 id="totalUsers">0</h4>
+                            <p>Total Users</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-user-shield"></i>
+                            <h4 id="totalAdmins">0</h4>
+                            <p>Administrators</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <h4 id="activeUsers">0</h4>
+                            <p>Active Today</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-database"></i>
+                            <h4>99.9%</h4>
+                            <p>System Uptime</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Account Page Content (initially hidden) -->
+            <div id="accountPage" class="page-content" style="display: none;">
+                <!-- User Account Section -->
+                <section class="account-section">
+                    <div class="page-header">
+                        <button id="backToMainBtn" class="back-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Main
+                        </button>
+                        <h2><i class="fas fa-user-circle"></i> My Account</h2>
+                    </div>
+
+                    <div class="account-header">
+                        <div class="account-badge" id="accountBadge">
+                            <i class="fas fa-crown"></i>
+                            <span>Premium User</span>
+                        </div>
+                    </div>
+
+                    <!-- Profile Card -->
+                    <div class="profile-main-card">
+                        <div class="profile-cover">
+                            <div class="profile-avatar-large">
+                                <i class="fas fa-user-circle" id="mainProfileAvatar"></i>
+                                <div class="avatar-overlay">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-primary">
+                                <h3 id="profileName">User Name</h3>
+                                <p id="profileRole" class="role-badge">User Role</p>
+                                <p id="profilePronouns" class="pronouns-badge" style="display: none;"></p>
+                            </div>
+                            <div class="profile-secondary">
+                                <div class="contact-info">
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <span id="profileEmail">user@lynnsdatabase.local</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span id="profileLocation">Location not set</span>
+                                    </div>
+                                    <div class="contact-item" id="profileJobTitleItem" style="display: none;">
+                                        <i class="fas fa-briefcase"></i>
+                                        <span id="profileJobTitle"></span>
+                                    </div>
+                                    <div class="contact-item" id="profileCompanyItem" style="display: none;">
+                                        <i class="fas fa-building"></i>
+                                        <span id="profileCompany"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-overview">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Last Login</span>
+                                <span class="stat-value" id="lastLogin">Today</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Session Time</span>
+                                <span class="stat-value" id="sessionTime">Active</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Security Status</span>
+                                <span class="stat-value" id="accountStatus">Verified</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Account Level</span>
+                                <span class="stat-value">Premium</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h4><i class="fas fa-bolt"></i> Quick Actions</h4>
+                        <div class="actions-grid">
+                            <button id="editProfileBtn" class="quick-action-btn">
+                                <i class="fas fa-edit"></i>
+                                <span>Edit Profile</span>
+                            </button>
+                            <button id="changePasswordBtn" class="quick-action-btn">
+                                <i class="fas fa-key"></i>
+                                <span>Change Password</span>
+                            </button>
+                            <button class="quick-action-btn" onclick="exportUserData()">
+                                <i class="fas fa-download"></i>
+                                <span>Export Data</span>
+                            </button>
+                            <button class="quick-action-btn" onclick="showCustomizationTabs()">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Account Customization Section -->
+                    <div class="customization-section">
+                        <div class="customization-tabs">
+                            <button class="tab-btn" data-tab="user-management"><i class="fas fa-users-cog"></i>
+                                Users</button>
+                            <button class="tab-btn" data-tab="analytics"><i class="fas fa-chart-line"></i>
+                                Analytics</button>
+                            <button class="tab-btn" data-tab="notifications"><i class="fas fa-bell"></i>
+                                Notifications</button>
+                            <button class="tab-btn active" data-tab="profile"><i class="fas fa-user"></i> Profile
+                                Settings</button>
+                            <button class="tab-btn" data-tab="appearance"><i class="fas fa-palette"></i>
+                                Appearance</button>
+                            <button class="tab-btn" data-tab="preferences"><i class="fas fa-cog"></i>
+                                Preferences</button>
+                            <button class="tab-btn" data-tab="security"><i class="fas fa-shield-alt"></i>
+                                Security</button>
+                        </div>
+
+                        <!-- User Management Tab -->
+                        <div class="tab-content" id="user-management-tab">
+                            <h3><i class="fas fa-users-cog"></i> User Management</h3>
+                            <div class="management-section">
+                                <div class="user-actions">
+                                    <button class="action-btn primary" onclick="showCreateUserModal()">
+                                        <i class="fas fa-user-plus"></i> Add New User
+                                    </button>
+                                    <button class="action-btn secondary" onclick="bulkUserActions()">
+                                        <i class="fas fa-tasks"></i> Bulk Actions
+                                    </button>
+                                    <button class="action-btn info" onclick="exportUsers()">
+                                        <i class="fas fa-download"></i> Export Users
+                                    </button>
+                                </div>
+                                <div class="user-table-container">
+                                    <table class="user-management-table">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="selectAll"></th>
+                                                <th>User</th>
+                                                <th>Role</th>
+                                                <th>Status</th>
+                                                <th>Last Active</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="userTableBody">
+                                            <!-- Dynamic user rows -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analytics Tab -->
+                        <div class="tab-content" id="analytics-tab">
+                            <h3><i class="fas fa-chart-line"></i> Analytics Dashboard</h3>
+                            <div class="analytics-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                                    <div class="stat-info">
+                                        <h3 id="totalUsers">4</h3>
+                                        <p>Total Users</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                                    <div class="stat-info">
+                                        <h3 id="activeUsers">3</h3>
+                                        <p>Active Users</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-chart-bar"></i></div>
+                                    <div class="stat-info">
+                                        <h3 id="dailyActivity">12</h3>
+                                        <p>Daily Activity</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                                    <div class="stat-info">
+                                        <h3 id="engagement">85%</h3>
+                                        <p>Engagement Rate</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="charts-container">
+                                <div class="chart-card">
+                                    <h5>User Growth</h5>
+                                    <div class="mock-chart growth-chart">
+                                        <div class="chart-bar" style="height: 20%"></div>
+                                        <div class="chart-bar" style="height: 35%"></div>
+                                        <div class="chart-bar" style="height: 60%"></div>
+                                        <div class="chart-bar" style="height: 75%"></div>
+                                        <div class="chart-bar" style="height: 100%"></div>
+                                    </div>
+                                </div>
+                                <div class="chart-card">
+                                    <h5>Activity Overview</h5>
+                                    <div class="activity-indicators">
+                                        <div class="activity-item">
+                                            <span>Logins Today</span>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width: 75%"></div>
+                                            </div>
+                                            <span>15</span>
+                                        </div>
+                                        <div class="activity-item">
+                                            <span>Searches</span>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width: 60%"></div>
+                                            </div>
+                                            <span>28</span>
+                                        </div>
+                                        <div class="activity-item">
+                                            <span>Profile Updates</span>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width: 40%"></div>
+                                            </div>
+                                            <span>7</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="reports-section">
+                                <h5><i class="fas fa-file-export"></i> Generate Reports</h5>
+                                <div class="report-options">
+                                    <button class="report-btn" onclick="generateReport('pdf')">
+                                        <i class="fas fa-file-pdf"></i> PDF Report
+                                    </button>
+                                    <button class="report-btn" onclick="generateReport('csv')">
+                                        <i class="fas fa-file-csv"></i> CSV Export
+                                    </button>
+                                    <button class="report-btn" onclick="generateReport('detailed')">
+                                        <i class="fas fa-file-alt"></i> Detailed Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications Tab -->
+                        <div class="tab-content" id="notifications-tab">
+                            <h3><i class="fas fa-bell"></i> Notification Center</h3>
+                            <div class="notifications-section">
+                                <div class="notification-preferences">
+                                    <h5><i class="fas fa-cog"></i> Notification Preferences</h5>
+                                    <div class="pref-options">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="emailNotifications" checked>
+                                            <span>Email Notifications</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="pushNotifications" checked>
+                                            <span>Push Notifications</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="smsNotifications">
+                                            <span>SMS Notifications</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="activityAlerts" checked>
+                                            <span>Activity Alerts</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="notifications-history">
+                                    <h5><i class="fas fa-history"></i> Recent Notifications</h5>
+                                    <div id="notificationsList" class="notifications-list">
+                                        <div class="notification-item">
+                                            <div class="notification-icon success">
+                                                <i class="fas fa-check"></i>
+                                            </div>
+                                            <div class="notification-content">
+                                                <h6>Profile Updated</h6>
+                                                <p>Your profile information has been successfully updated</p>
+                                                <span class="notification-time">2 minutes ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="notification-item">
+                                            <div class="notification-icon info">
+                                                <i class="fas fa-info"></i>
+                                            </div>
+                                            <div class="notification-content">
+                                                <h6>New User Registered</h6>
+                                                <p>A new user has registered on the platform</p>
+                                                <span class="notification-time">1 hour ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="notification-item">
+                                            <div class="notification-icon warning">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                            </div>
+                                            <div class="notification-content">
+                                                <h6>Security Alert</h6>
+                                                <p>Multiple failed login attempts detected</p>
+                                                <span class="notification-time">3 hours ago</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="notification-actions">
+                                    <button class="action-btn primary" onclick="saveNotificationPrefs()">
+                                        <i class="fas fa-save"></i> Save Preferences
+                                    </button>
+                                    <button class="action-btn secondary" onclick="clearNotifications()">
+                                        <i class="fas fa-trash"></i> Clear All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Settings Tab -->
+                        <div class="tab-content active" id="profile-tab">
+                            <h3><i class="fas fa-user-edit"></i> Edit Profile Information</h3>
+
+                            <!-- Name Change Section -->
+                            <div class="name-change-section">
+                                <h4><i class="fas fa-id-card"></i> Identity</h4>
+                                <div class="name-fields">
+                                    <div class="setting-group">
+                                        <label for="firstName">First Name *</label>
+                                        <input type="text" id="firstName" placeholder="Enter your first name" required>
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="lastName">Last Name *</label>
+                                        <input type="text" id="lastName" placeholder="Enter your last name" required>
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="displayName">Display Name</label>
+                                        <input type="text" id="displayName" placeholder="How you want to be shown"
+                                            readonly>
+                                        <small class="field-help">This is automatically created from your first and last
+                                            name</small>
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" id="username" placeholder="Choose a unique username"
+                                            pattern="[a-zA-Z0-9_]+" minlength="3">
+                                        <small class="field-help">Only letters, numbers, and underscores allowed (min 3
+                                            characters)</small>
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="pronouns">Pronouns</label>
+                                        <select id="pronouns">
+                                            <option value="">Select pronouns</option>
+                                            <option value="he/him">He/Him</option>
+                                            <option value="she/her">She/Her</option>
+                                            <option value="they/them">They/Them</option>
+                                            <option value="he/they">He/They</option>
+                                            <option value="she/they">She/They</option>
+                                            <option value="custom">Custom</option>
+                                        </select>
+                                    </div>
+                                    <div class="setting-group" id="customPronounsGroup" style="display: none;">
+                                        <label for="customPronouns">Custom Pronouns</label>
+                                        <input type="text" id="customPronouns" placeholder="e.g., xe/xem, ze/zir">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact Information -->
+                            <div class="contact-section">
+                                <h4><i class="fas fa-address-card"></i> Contact Information</h4>
+                                <div class="settings-grid">
+                                    <div class="setting-group">
+                                        <label for="userEmail">Email Address *</label>
+                                        <input type="email" id="userEmail" placeholder="Enter your email" required>
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="userPhone">Phone Number</label>
+                                        <input type="tel" id="userPhone" placeholder="+1 (555) 123-4567">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="userLocation">Location</label>
+                                        <input type="text" id="userLocation" placeholder="City, State/Country">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="timezone">Timezone</label>
+                                        <select id="timezone">
+                                            <option value="">Select timezone</option>
+                                            <option value="America/New_York">Eastern Time (ET)</option>
+                                            <option value="America/Chicago">Central Time (CT)</option>
+                                            <option value="America/Denver">Mountain Time (MT)</option>
+                                            <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                                            <option value="UTC">UTC</option>
+                                            <option value="Europe/London">GMT</option>
+                                            <option value="Europe/Paris">CET</option>
+                                            <option value="Asia/Tokyo">JST</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Professional Information -->
+                            <div class="professional-section">
+                                <h4><i class="fas fa-briefcase"></i> Professional Information</h4>
+                                <div class="settings-grid">
+                                    <div class="setting-group">
+                                        <label for="jobTitle">Job Title</label>
+                                        <input type="text" id="jobTitle" placeholder="Your current position">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="company">Company/Organization</label>
+                                        <input type="text" id="company" placeholder="Where you work">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="department">Department</label>
+                                        <input type="text" id="department" placeholder="Your department or team">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="workLocation">Work Location</label>
+                                        <select id="workLocation">
+                                            <option value="">Select work arrangement</option>
+                                            <option value="office">Office</option>
+                                            <option value="remote">Remote</option>
+                                            <option value="hybrid">Hybrid</option>
+                                            <option value="travel">Travel</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Personal Information -->
+                            <div class="personal-section">
+                                <h4><i class="fas fa-user"></i> Personal Information</h4>
+                                <div class="settings-grid">
+                                    <div class="setting-group full-width">
+                                        <label for="userBio">Bio</label>
+                                        <textarea id="userBio" placeholder="Tell us about yourself..."
+                                            maxlength="500"></textarea>
+                                        <small class="field-help"><span id="bioCharCount">0</span>/500
+                                            characters</small>
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="birthDate">Birth Date (Optional)</label>
+                                        <input type="date" id="birthDate">
+                                        <small class="field-help">This will not be shown publicly</small>
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="interests">Interests/Hobbies</label>
+                                        <input type="text" id="interests" placeholder="Photography, Coding, Travel...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Social Links -->
+                            <div class="social-section">
+                                <h4><i class="fas fa-share-alt"></i> Social Links</h4>
+                                <div class="settings-grid">
+                                    <div class="setting-group">
+                                        <label for="userWebsite">Personal Website</label>
+                                        <input type="url" id="userWebsite" placeholder="https://your-website.com">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="linkedinUrl">LinkedIn</label>
+                                        <input type="url" id="linkedinUrl"
+                                            placeholder="https://linkedin.com/in/yourname">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="githubUrl">GitHub</label>
+                                        <input type="url" id="githubUrl" placeholder="https://github.com/yourusername">
+                                    </div>
+                                    <div class="setting-group">
+                                        <label for="twitterUrl">Twitter/X</label>
+                                        <input type="url" id="twitterUrl"
+                                            placeholder="https://twitter.com/yourusername">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Profile Photo Section -->
+                            <div class="profile-photo-section">
+                                <h4><i class="fas fa-camera"></i> Profile Photo</h4>
+                                <div class="photo-upload">
+                                    <div class="current-photo">
+                                        <i class="fas fa-user-circle" id="profilePhotoDisplay"></i>
+                                        <div class="photo-overlay">
+                                            <i class="fas fa-camera"></i>
+                                        </div>
+                                    </div>
+                                    <div class="photo-options">
+                                        <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+                                        <button class="photo-btn primary"
+                                            onclick="document.getElementById('photoUpload').click()">
+                                            <i class="fas fa-upload"></i> Upload Photo
+                                        </button>
+                                        <button class="photo-btn secondary" id="removePhoto">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                        <button class="photo-btn secondary" id="useAvatarGenerator">
+                                            <i class="fas fa-robot"></i> Generate Avatar
+                                        </button>
+                                    </div>
+                                    <small class="field-help">Recommended: 400x400px, max 2MB (JPG, PNG, GIF)</small>
+                                </div>
+                            </div>
+
+                            <!-- Real-time Preview -->
+                            <div class="profile-preview-section">
+                                <h4><i class="fas fa-eye"></i> Profile Preview</h4>
+                                <div class="preview-card">
+                                    <div class="preview-avatar">
+                                        <i class="fas fa-user-circle" id="previewAvatar"></i>
+                                    </div>
+                                    <div class="preview-info">
+                                        <h5 id="previewName">Your Name</h5>
+                                        <p id="previewRole">Your Role</p>
+                                        <p id="previewPronouns" class="pronouns-display"></p>
+                                        <p id="previewLocation"></p>
+                                        <p id="previewBio">Your bio will appear here...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Profile Actions -->
+                            <div class="profile-actions">
+                                <button class="action-btn save-profile" id="saveProfileBtn">
+                                    <i class="fas fa-save"></i> Save Profile Changes
+                                </button>
+                                <button class="action-btn preview-profile" id="previewProfileBtn">
+                                    <i class="fas fa-eye"></i> Preview Public Profile
+                                </button>
+                                <button class="action-btn reset-profile" id="resetProfileBtn">
+                                    <i class="fas fa-undo"></i> Reset Changes
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Appearance Tab -->
+                        <div class="tab-content" id="appearance-tab">
+                            <h3><i class="fas fa-paint-brush"></i> Customize Your Experience</h3>
+                            <div class="appearance-options">
+                                <div class="theme-selector">
+                                    <h4><i class="fas fa-palette"></i> Theme</h4>
+                                    <div class="theme-options">
+                                        <div class="theme-option active" data-theme="default">
+                                            <div class="theme-preview default-theme"></div>
+                                            <span>Default</span>
+                                        </div>
+                                        <div class="theme-option" data-theme="dark">
+                                            <div class="theme-preview dark-theme"></div>
+                                            <span>Dark</span>
+                                        </div>
+                                        <div class="theme-option" data-theme="ocean">
+                                            <div class="theme-preview ocean-theme"></div>
+                                            <span>Ocean</span>
+                                        </div>
+                                        <div class="theme-option" data-theme="sunset">
+                                            <div class="theme-preview sunset-theme"></div>
+                                            <span>Sunset</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="color-customization">
+                                    <h4><i class="fas fa-droplet"></i> Accent Color</h4>
+                                    <div class="color-picker">
+                                        <input type="color" id="accentColor" value="#667eea">
+                                        <label for="accentColor">Choose your accent color</label>
+                                    </div>
+                                </div>
+                                <div class="font-options">
+                                    <h4><i class="fas fa-font"></i> Font Size</h4>
+                                    <div class="font-slider">
+                                        <input type="range" id="fontSize" min="12" max="20" value="16">
+                                        <span id="fontSizeValue">16px</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preferences Tab -->
+                        <div class="tab-content" id="preferences-tab">
+                            <h3><i class="fas fa-sliders-h"></i> Account Preferences</h3>
+                            <div class="preferences-grid">
+                                <div class="preference-group">
+                                    <h4><i class="fas fa-bell"></i> Notifications</h4>
+                                    <div class="toggle-option">
+                                        <label class="toggle">
+                                            <input type="checkbox" id="emailNotifications" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span>Email Notifications</span>
+                                    </div>
+                                    <div class="toggle-option">
+                                        <label class="toggle">
+                                            <input type="checkbox" id="pushNotifications">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span>Push Notifications</span>
+                                    </div>
+                                </div>
+                                <div class="preference-group">
+                                    <h4><i class="fas fa-eye"></i> Privacy</h4>
+                                    <div class="toggle-option">
+                                        <label class="toggle">
+                                            <input type="checkbox" id="profileVisibility" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span>Public Profile</span>
+                                    </div>
+                                    <div class="toggle-option">
+                                        <label class="toggle">
+                                            <input type="checkbox" id="showLastSeen">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span>Show Last Seen</span>
+                                    </div>
+                                </div>
+                                <div class="preference-group">
+                                    <h4><i class="fas fa-globe"></i> Language & Region</h4>
+                                    <select id="languageSelect">
+                                        <option value="en">English</option>
+                                        <option value="es">Español</option>
+                                        <option value="fr">Français</option>
+                                        <option value="de">Deutsch</option>
+                                    </select>
+                                    <select id="timezoneSelect">
+                                        <option value="UTC">UTC</option>
+                                        <option value="EST">Eastern Time</option>
+                                        <option value="PST">Pacific Time</option>
+                                        <option value="GMT">Greenwich Mean Time</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Security Tab -->
+                        <div class="tab-content" id="security-tab">
+                            <h3><i class="fas fa-lock"></i> Security Settings</h3>
+                            <div class="security-options">
+                                <div class="security-group">
+                                    <h4><i class="fas fa-key"></i> Change Password</h4>
+                                    <div class="password-form">
+                                        <input type="password" id="currentPassword" placeholder="Current Password">
+                                        <input type="password" id="newPassword" placeholder="New Password">
+                                        <input type="password" id="confirmPassword" placeholder="Confirm New Password">
+                                        <button class="security-btn" id="changePasswordSubmit">Update Password</button>
+                                    </div>
+                                </div>
+                                <div class="security-group">
+                                    <h4><i class="fas fa-mobile-alt"></i> Two-Factor Authentication</h4>
+                                    <div class="toggle-option">
+                                        <label class="toggle">
+                                            <input type="checkbox" id="twoFactorAuth">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span>Enable 2FA</span>
+                                    </div>
+                                    <p class="security-info">Add an extra layer of security to your account</p>
+                                </div>
+                                <div class="security-group">
+                                    <h4><i class="fas fa-history"></i> Login History</h4>
+                                    <div class="login-history">
+                                        <div class="login-entry">
+                                            <i class="fas fa-laptop"></i>
+                                            <span>Windows - Chrome</span>
+                                            <span class="login-time">Today, 2:30 PM</span>
+                                        </div>
+                                        <div class="login-entry">
+                                            <i class="fas fa-mobile"></i>
+                                            <span>Mobile Device</span>
+                                            <span class="login-time">Yesterday, 6:45 PM</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save/Reset Actions -->
+                        <div class="account-actions-bottom">
+                            <button class="save-btn" id="saveAllSettings">
+                                <i class="fas fa-save"></i> Save All Changes
+                            </button>
+                            <button class="reset-btn" id="resetSettings">
+                                <i class="fas fa-undo"></i> Reset to Default
+                            </button>
+                        </div>
+
+                        <!-- Data Management Section -->
+                        <div class="data-management-section">
+                            <h4><i class="fas fa-database"></i> Data Management</h4>
+                            <div class="data-actions">
+                                <button class="data-btn export-btn" onclick="exportUserData()">
+                                    <i class="fas fa-file-export"></i>
+                                    Export Backup
+                                </button>
+                                <button class="data-btn import-btn"
+                                    onclick="document.getElementById('importFile').click()">
+                                    <i class="fas fa-file-import"></i>
+                                    Import Backup
+                                </button>
+                                <button class="data-btn clear-btn" onclick="clearAllData()">
+                                    <i class="fas fa-trash-alt"></i>
+                                    Clear All Data
+                                </button>
+                                <input type="file" id="importFile" accept=".json" style="display: none;"
+                                    onchange="importUserData(this.files[0])">
+                            </div>
+                            <p class="data-info">
+                                <i class="fas fa-info-circle"></i>
+                                Export your data to create a backup. Import to restore settings from a previous backup.
+                            </p>
+                        </div>
+                </section>
+            </div>
+
+            <footer>
+                <p><i class="fas fa-code"></i> Built with HTML5, CSS3 & JavaScript</p>
+                <p><small>Modern database interface with interactive features</small></p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
