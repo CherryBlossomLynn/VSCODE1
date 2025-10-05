@@ -1308,6 +1308,29 @@
 </head>
 
 <body>
+    <!-- HTML File Navigation Dropdown -->
+    <div class="html-file-dropdown" id="htmlFileDropdown">
+        <div class="dropdown-header" onclick="toggleDropdown()">
+            <i class="fas fa-file-code"></i>
+            HTML Files
+            <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i>
+        </div>
+        <div class="dropdown-content">
+            <a href="index.html" class="dropdown-item">
+                <i class="fas fa-home"></i>
+                index.html (Main)
+            </a>
+            <a href="index-integrated.html" class="dropdown-item">
+                <i class="fas fa-rocket"></i>
+                index-integrated.html (Enhanced)
+            </a>
+            <a href="lynn-website.html" class="dropdown-item current">
+                <i class="fas fa-star"></i>
+                lynn-website.html (Standalone)
+            </a>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Login Section -->
         <div class="login-section" id="loginSection">
@@ -1874,6 +1897,47 @@
     </div>
 
     <script>
+        // HTML File Navigation Dropdown Functionality
+        function toggleDropdown() {
+            const dropdown = document.getElementById('htmlFileDropdown');
+            const chevron = dropdown.querySelector('.fa-chevron-down');
+            
+            dropdown.classList.toggle('open');
+            
+            // Animate chevron
+            if (dropdown.classList.contains('open')) {
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('htmlFileDropdown');
+            const chevron = dropdown.querySelector('.fa-chevron-down');
+            
+            if (dropdown && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('open');
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Set current file indicator based on current page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            
+            dropdownItems.forEach(item => {
+                const href = item.getAttribute('href');
+                item.classList.remove('current');
+                
+                if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+                    item.classList.add('current');
+                }
+            });
+        });
+
         // Valid credentials and current user state - Enhanced with profiles
         const validUsers = {
             'lynn': 'Lynn@1104',

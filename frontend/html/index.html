@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lynn's Database</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="preload" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
@@ -29,6 +29,29 @@
 
     <!-- Auto-save indicator -->
     <div class="auto-save-indicator">Auto-saved</div>
+
+    <!-- HTML File Navigation Dropdown -->
+    <div class="html-file-dropdown" id="htmlFileDropdown">
+        <div class="dropdown-header" onclick="toggleDropdown()">
+            <i class="fas fa-file-code"></i>
+            HTML Files
+            <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i>
+        </div>
+        <div class="dropdown-content">
+            <a href="index.html" class="dropdown-item current">
+                <i class="fas fa-home"></i>
+                index.html (Main)
+            </a>
+            <a href="index-integrated.html" class="dropdown-item">
+                <i class="fas fa-rocket"></i>
+                index-integrated.html (Enhanced)
+            </a>
+            <a href="lynn-website.html" class="dropdown-item">
+                <i class="fas fa-star"></i>
+                lynn-website.html (Standalone)
+            </a>
+        </div>
+    </div>
 
     <div class="container" role="main">
         <header>
@@ -974,7 +997,7 @@
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script src="assets/script.js"></script>
 </body>
 
 </html>
