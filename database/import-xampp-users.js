@@ -30,25 +30,25 @@ async function connectToXAMPP() {
 // Import users from XAMPP MySQL
 async function importFromXAMPP() {
     let connection;
-    
+
     try {
         connection = await connectToXAMPP();
-        
+
         // First, let's see what tables exist
         console.log('\n📋 Checking available tables...');
         const [tables] = await connection.execute('SHOW TABLES');
         console.log('Available tables:', tables);
-        
+
         // Check if users table exists
-        const userTableExists = tables.some(table => 
+        const userTableExists = tables.some(table =>
             Object.values(table)[0].toLowerCase() === 'users'
         );
-        
+
         if (!userTableExists) {
             console.log('\n🔄 Users table not found. Creating sample data...');
             await createSampleXAMPPData(connection);
         }
-        
+
         // Import users
         console.log('\n📥 Importing users from XAMPP database...');
         const [users] = await connection.execute(`
@@ -57,14 +57,14 @@ async function importFromXAMPP() {
             WHERE username NOT IN (${PROTECTED_USERS.map(() => '?').join(',')})
             ORDER BY id
         `, PROTECTED_USERS);
-        
+
         console.log(`\n📊 Found ${users.length} users to import (excluding protected users)`);
-        
+
         if (users.length === 0) {
             console.log('⚠️  No additional users found to import.');
             return [];
         }
-        
+
         // Convert MySQL data to website format
         const importedUsers = users.map(user => ({
             id: user.id,
@@ -77,14 +77,14 @@ async function importFromXAMPP() {
             avatar: user.avatar || 'fas fa-user',
             location: user.location || 'Unknown'
         }));
-        
+
         console.log('\n📋 Imported Users:');
         importedUsers.forEach(user => {
             console.log(`  - ${user.name} (${user.username}) - ${user.role} - ${user.status}`);
         });
-        
+
         return importedUsers;
-        
+
     } catch (error) {
         console.error('❌ Import failed:', error);
         throw error;
@@ -116,7 +116,7 @@ async function createSampleXAMPPData(connection) {
                 location VARCHAR(100) DEFAULT 'Unknown'
             )
         `);
-        
+
         // Insert sample users (excluding protected ones)
         const sampleUsers = [
             ['alex_rodriguez', '$2b$10$sample_hash', 'alex@company.com', 'Alex Rodriguez', 'manager', 'active', 'fas fa-user-tie', 'Miami, FL'],
@@ -130,16 +130,16 @@ async function createSampleXAMPPData(connection) {
             ['kevin_lee', '$2b$10$sample_hash', 'kevin@company.com', 'Kevin Lee', 'admin', 'active', 'fas fa-user-shield', 'Atlanta, GA'],
             ['melissa_brown', '$2b$10$sample_hash', 'melissa@company.com', 'Melissa Brown', 'user', 'active', 'fas fa-user', 'Charlotte, NC']
         ];
-        
+
         for (const user of sampleUsers) {
             await connection.execute(`
                 INSERT IGNORE INTO users (username, password_hash, email, full_name, role, status, avatar, location, last_login)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 168) HOUR))
             `, user);
         }
-        
+
         console.log('✅ Sample XAMPP data created');
-        
+
     } catch (error) {
         console.error('❌ Failed to create sample data:', error);
         throw error;
@@ -149,52 +149,52 @@ async function createSampleXAMPPData(connection) {
 // Update the website files with imported data
 async function updateWebsiteFiles(importedUsers) {
     const fs = require('fs').promises;
-    
+
     try {
         // Read current script.js
         const scriptContent = await fs.readFile('script.js', 'utf8');
-        
+
         // Preserve protected users and add imported users
         const protectedUsersData = [
             { id: 1, name: 'Lynn Miller', email: 'lynn@lynnsdatabase.local', role: 'Admin', status: 'Active', lastSeen: '2 minutes ago' },
             { id: 2, name: 'Michael Johnson', email: 'michael@lynnsdatabase.local', role: 'User', status: 'Active', lastSeen: '5 minutes ago' },
             { id: 999, name: 'Test User', email: 'testuser@lynnsdatabase.local', role: 'User', status: 'Active', lastSeen: '1 minute ago' }
         ];
-        
+
         // Combine protected users with imported users
         const allUsers = [...protectedUsersData, ...importedUsers.map((user, index) => ({
             ...user,
             id: index + 10 // Start imported users from ID 10
         }))];
-        
+
         // Create new userDatabase array string
         const userDatabaseString = `        const userDatabase = [
-${allUsers.map(user => 
+${allUsers.map(user =>
             `            { id: ${user.id}, name: '${user.name}', email: '${user.email}', role: '${user.role}', status: '${user.status}', lastSeen: '${user.lastSeen}' }`
         ).join(',\n')}
         ];`;
-        
+
         // Replace the userDatabase in script.js
         const updatedScript = scriptContent.replace(
             /const userDatabase = \[[\s\S]*?\];/,
             userDatabaseString
         );
-        
+
         await fs.writeFile('script.js', updatedScript, 'utf8');
         console.log('✅ Updated script.js with imported users');
-        
+
         // Update lynn-website.html as well
         const htmlContent = await fs.readFile('lynn-website.html', 'utf8');
         const updatedHtml = htmlContent.replace(
             /const userDatabase = \[[\s\S]*?\];/,
             userDatabaseString
         );
-        
+
         await fs.writeFile('lynn-website.html', updatedHtml, 'utf8');
         console.log('✅ Updated lynn-website.html with imported users');
-        
+
         return allUsers;
-        
+
     } catch (error) {
         console.error('❌ Failed to update website files:', error);
         throw error;
@@ -217,14 +217,14 @@ function capitalizeStatus(status) {
 
 function formatLastSeen(lastLogin) {
     if (!lastLogin) return 'Never';
-    
+
     const now = new Date();
     const loginDate = new Date(lastLogin);
     const diffMs = now - loginDate;
     const diffMins = Math.floor(diffMs / (1000 * 60));
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     if (diffMins < 60) return `${diffMins} minutes ago`;
     if (diffHours < 24) return `${diffHours} hours ago`;
     return `${diffDays} days ago`;
@@ -235,26 +235,26 @@ async function main() {
     console.log('🚀 Starting XAMPP MySQL Database Import');
     console.log('🔒 Protected users: lynn, michael, testuser');
     console.log('━'.repeat(50));
-    
+
     try {
         // Import users from XAMPP
         const importedUsers = await importFromXAMPP();
-        
+
         if (importedUsers.length > 0) {
             // Update website files
             const allUsers = await updateWebsiteFiles(importedUsers);
-            
+
             console.log('\n📊 Import Summary:');
             console.log(`  - Protected users: ${PROTECTED_USERS.length}`);
             console.log(`  - Imported users: ${importedUsers.length}`);
             console.log(`  - Total users: ${allUsers.length}`);
-            
+
             console.log('\n✅ Database import completed successfully!');
             console.log('🌐 You can now test the updated website');
         } else {
             console.log('\n⚠️  No users imported. Database may be empty or contain only protected users.');
         }
-        
+
     } catch (error) {
         console.error('\n❌ Import process failed:', error.message);
         process.exit(1);

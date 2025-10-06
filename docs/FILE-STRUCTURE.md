@@ -17,10 +17,9 @@ VSCODE1/
 
 ### 🎨 frontend/
 Contains all frontend development files:
-- `html/` - HTML files folder (dropdown structure)
-  - `index.html` - Main website entry point
-  - `index-integrated.html` - Enhanced integrated version
-  - `lynn-website.html` - Original enhanced version
+- `index.html` - Main website entry point
+- `index-integrated.html` - Enhanced integrated version
+- `lynn-website.html` - Original enhanced version
 - `css/styles.css` - Main stylesheet
 - `js/script.js` - Main JavaScript functionality
 - `images/` - Image assets folder
@@ -48,22 +47,15 @@ Contains project documentation:
 ## 🔗 File References Updated
 
 All HTML files have been updated to reference the new file locations:
-- CSS: `href="css/styles.css"`
-- JavaScript: `src="js/script.js"`
-- Images: `src="images/filename.ext"`
+- CSS: `href="assets/styles.css"`
+- JavaScript: `src="assets/script.js"`
 
 ## 🚀 Usage
 
 ### For Frontend Development:
-- Navigate to `frontend/` folder
-- Main files: Located in `frontend/html/` folder
-  - `html/index.html` - Main website entry point
-  - `html/index-integrated.html` - Enhanced integrated version  
-  - `html/lynn-website.html` - Original enhanced standalone version
-- Styles: Located in `frontend/css/` folder
-- Scripts: Located in `frontend/js/` folder
-- Images: Located in `frontend/images/` folder
-- Development guide: `frontend/README.md`
+- Main files: `index.html`, `index-integrated.html`
+- Assets: Located in `assets/` folder
+- Images: Located in `images/` folder
 
 ### For Backend Development:
 - Navigate to `backend/` folder
