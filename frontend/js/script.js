@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         initializeMainPage();
         initializeAccountFeatures();
+        updateMessageBadge();
     }
 
     function loadUserProfile(username) {
@@ -267,6 +268,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 initializeAccountCustomization();
                 announcePageChange('Account');
                 setFocusToFirstElement(accountPage);
+            });
+        }
+
+        const messagesBtn = document.getElementById('messagesBtn');
+        if (messagesBtn) {
+            messagesBtn.addEventListener('click', function () {
+                showMessages();
             });
         }
 
@@ -2340,6 +2348,152 @@ document.addEventListener('DOMContentLoaded', function () {
     window.showNotification = showNotification;
     window.showCustomizationTabs = showCustomizationTabs;
     window.exportUserData = exportUserData;
+    // Messages System
+    function showMessages() {
+        // Create messages modal if it doesn't exist
+        let messagesModal = document.getElementById('messagesModal');
+        if (!messagesModal) {
+            messagesModal = createMessagesModal();
+            document.body.appendChild(messagesModal);
+        }
+        
+        // Show the modal
+        messagesModal.style.display = 'block';
+        loadMessages();
+        
+        // Hide message badge when opened
+        const messageBadge = document.getElementById('messageBadge');
+        if (messageBadge) {
+            messageBadge.style.display = 'none';
+        }
+    }
+
+    function createMessagesModal() {
+        const modal = document.createElement('div');
+        modal.id = 'messagesModal';
+        modal.className = 'modal messages-modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-envelope"></i> Messages</h2>
+                    <button class="close-btn" onclick="closeMessagesModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="messages-container">
+                        <div class="messages-list" id="messagesList">
+                            <!-- Messages will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        return modal;
+    }
+
+    function loadMessages() {
+        const messagesList = document.getElementById('messagesList');
+        if (!messagesList) return;
+
+        // Sample messages - in a real app, this would come from a server
+        const messages = [
+            {
+                id: 1,
+                from: 'System',
+                subject: 'Welcome to Lynn\'s Database!',
+                message: 'Thank you for joining our platform. Explore the features and manage your data efficiently.',
+                time: '2 hours ago',
+                read: false,
+                type: 'system'
+            },
+            {
+                id: 2,
+                from: 'Michael',
+                subject: 'Friend Request',
+                message: 'Hey! I\'d like to connect with you on the platform. Let\'s collaborate!',
+                time: '1 day ago',
+                read: false,
+                type: 'friend-request'
+            },
+            {
+                id: 3,
+                from: 'Admin',
+                subject: 'Platform Update',
+                message: 'New features have been added to improve your experience. Check them out!',
+                time: '3 days ago',
+                read: true,
+                type: 'notification'
+            }
+        ];
+
+        messagesList.innerHTML = messages.map(message => `
+            <div class="message-item ${!message.read ? 'unread' : ''}" data-message-id="${message.id}">
+                <div class="message-header">
+                    <div class="message-from">
+                        <i class="fas ${getMessageIcon(message.type)}"></i>
+                        <strong>${message.from}</strong>
+                    </div>
+                    <div class="message-time">${message.time}</div>
+                </div>
+                <div class="message-subject">${message.subject}</div>
+                <div class="message-preview">${message.message}</div>
+                <div class="message-actions">
+                    ${message.type === 'friend-request' ? 
+                        '<button class="btn-accept" onclick="acceptFriendRequest(' + message.id + ')">Accept</button><button class="btn-decline" onclick="declineFriendRequest(' + message.id + ')">Decline</button>' : 
+                        '<button class="btn-read" onclick="markAsRead(' + message.id + ')">Mark as Read</button>'
+                    }
+                    <button class="btn-delete" onclick="deleteMessage(' + message.id + ')">Delete</button>
+                </div>
+            </div>
+        `).join('');
+
+        // Update badge count
+        updateMessageBadge();
+    }
+
+    function getMessageIcon(type) {
+        switch (type) {
+            case 'system': return 'fa-cog';
+            case 'friend-request': return 'fa-user-plus';
+            case 'notification': return 'fa-bell';
+            default: return 'fa-envelope';
+        }
+    }
+
+    function updateMessageBadge() {
+        const messageBadge = document.getElementById('messageBadge');
+        // Count unread messages (in a real app, this would be from server data)
+        const unreadCount = 2; // Sample count
+        
+        if (messageBadge && unreadCount > 0) {
+            messageBadge.textContent = unreadCount;
+            messageBadge.style.display = 'flex';
+        } else if (messageBadge) {
+            messageBadge.style.display = 'none';
+        }
+    }
+
+    window.showMessages = showMessages;
+    window.closeMessagesModal = function() {
+        const modal = document.getElementById('messagesModal');
+        if (modal) modal.style.display = 'none';
+    };
+    window.acceptFriendRequest = function(id) {
+        showNotification('Friend request accepted!', 'success');
+        loadMessages(); // Refresh messages
+    };
+    window.declineFriendRequest = function(id) {
+        showNotification('Friend request declined.', 'info');
+        loadMessages(); // Refresh messages
+    };
+    window.markAsRead = function(id) {
+        showNotification('Message marked as read.', 'info');
+        loadMessages(); // Refresh messages
+    };
+    window.deleteMessage = function(id) {
+        showNotification('Message deleted.', 'info');
+        loadMessages(); // Refresh messages
+    };
+
     window.importUserData = importUserData;
     window.clearAllData = clearAllData;
     window.logout = logout;
