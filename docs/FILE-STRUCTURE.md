@@ -5,8 +5,7 @@ This document describes the organized file structure for Lynn's Database project
 ## 🏗️ Root Directory
 ```
 VSCODE1/
-├── 📄 git-installer.exe             # Git installer
-├── 📁 frontend/                     # Frontend development files
+├──  frontend/                     # Frontend development files
 ├── 📁 backend/                      # Server-side files
 ├── 📁 database/                     # Database files
 ├── 📁 docs/                         # Documentation
@@ -17,9 +16,7 @@ VSCODE1/
 
 ### 🎨 frontend/
 Contains all frontend development files:
-- `index.html` - Main website entry point
-- `index-integrated.html` - Enhanced integrated version
-- `lynn-website.html` - Original enhanced version
+- `html/index.html` - Main website entry point
 - `css/styles.css` - Main stylesheet
 - `js/script.js` - Main JavaScript functionality
 - `images/` - Image assets folder
